@@ -48,7 +48,8 @@ final class Uri {
         // http://www.apps.ietf.org/rfc/rfc3986.html#sec-3.2.2
         // "Although host is case-insensitive, producers and normalizers should use lowercase for
         // registered names and hexadecimal addresses for the sake of uniformity"
-        if ($inAddr = @\inet_pton(\trim($this->host, "[]"))) {
+        // @TODO make sure that host is an ip to avoid using @ to hide errors
+        if (filter_var($this->host, FILTER_VALIDATE_IP) && $inAddr = @\inet_pton(\trim($this->host, "[]"))) {
             $this->host = \strtolower($this->host);
 
             if (isset($inAddr[4])) {
